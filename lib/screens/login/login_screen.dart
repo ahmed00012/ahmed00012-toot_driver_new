@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:easy_localization/src/public_ext.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +9,6 @@ import 'package:tood_driver_new/screens/help/default_button.dart';
 import 'package:tood_driver_new/screens/help/form_error.dart';
 import 'package:tood_driver_new/screens/help/loading_screen.dart';
 import 'package:tood_driver_new/screens/home/home_screen.dart';
-import 'package:tood_driver_new/servise/api_exceptions.dart';
 import 'package:tood_driver_new/servise/vars.dart';
 import 'package:tood_driver_new/translations/locale_keys.g.dart';
 
@@ -26,6 +24,7 @@ class _LoginScreenState extends State<LoginScreen> {
   String? password;
   bool _passwordVisible = false;
   GlobalKey<FormState> _formKey = GlobalKey();
+  String? token;
 
   final List<String> errors = [];
 
@@ -44,48 +43,56 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> _submit() async {
-    _formKey.currentState?.validate();
-    try {
-      print('0000000000000000000000000000');
-      if (_formKey.currentState!.validate()) {
-        _formKey.currentState?.save();
-        LoadingScreen.show(context);
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState?.save();
+      LoadingScreen.show(context);
 
-        await Provider.of<AuthProvider>(context, listen: false)
-            .login(phone!, password!, token!);
-        Navigator.of(context).popUntil((route) => route.isFirst);
-        Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (context) => HomeScreen(
-                  selectedPage: 0,
-                )));
-        // helpNavigateTo(context, HomeScreen());
-      }
-    } on ApiException catch (_) {
-      print('ApiException');
-      Navigator.of(context).pop();
-      ServerConstants.showDialog1(context, _.toString());
-    } on DioError catch (e) {
-      //<<<<< IN THIS LINE
-      print(
-          "e.response.statusCode    ////////////////////////////         DioError");
-      if (e.response!.statusCode == 400) {
-        print(e.response!.statusCode);
-      } else {
-        print(e.message);
-        // print(e?.request);
-      }
-    } catch (e) {
-      print('catch');
-      print(e);
+      Provider.of<AuthProvider>(context, listen: false)
+          .login(phone!, password!, token!)
+          .then((value) {
+        if (value['success'] == "0") {
+          Navigator.pop(context);
+          ServerConstants.showDialog1(context, value['message']);
+        } else {
+          Navigator.of(context).popUntil((route) => route.isFirst);
+          Navigator.of(context).pushReplacement(MaterialPageRoute(
+              builder: (context) => HomeScreen(
+                    selectedPage: 0,
+                  )));
+        }
+      });
 
-      Navigator.of(context).pop();
-      ServerConstants.showDialog1(context, e.toString());
-    } finally {
-      if (mounted) setState(() {});
+      // try {
+      //   print('0000000000000000000000000000');
+      //
+      //
+      //     // helpNavigateTo(context, HomeScreen());
+      //   }
+      // } on ApiException catch (_) {
+      //   print('ApiException');
+      //   Navigator.of(context).pop();
+      //   ServerConstants.showDialog1(context, _.toString());
+      // } on DioError catch (e) {
+      //   //<<<<< IN THIS LINE
+      //   print(
+      //       "e.response.statusCode    ////////////////////////////         DioError");
+      //   if (e.response!.statusCode == 400) {
+      //     print(e.response!.statusCode);
+      //   } else {
+      //     print(e.message);
+      //     // print(e?.request);
+      //   }
+      // } catch (e) {
+      //   print('catch');
+      //   print(e);
+      //
+      //   Navigator.of(context).pop();
+      //   ServerConstants.showDialog1(context, e.toString());
+      // } finally {
+      //   if (mounted) setState(() {});
+      // }
     }
   }
-
-  String? token;
 
   @override
   void initState() {
@@ -160,6 +167,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       } else if (value.length != 10) {
                         addError(error: kShortPhoneError);
                         return "";
+                      } else if (!value.startsWith('05')) {
+                        addError(error: kShortPhoneError);
+                        return "";
                       }
                       return null;
                     },
@@ -197,6 +207,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       } else if (value.length >= 8) {
                         removeError(error: kShortPassError);
                       }
+
                       return null;
                     },
                     validator: (value) {
@@ -205,6 +216,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         return "";
                       } else if (value.length < 8) {
                         addError(error: kShortPassError);
+
                         return "";
                       }
                       return null;

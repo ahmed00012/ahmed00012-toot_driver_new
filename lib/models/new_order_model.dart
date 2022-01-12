@@ -437,7 +437,7 @@ class Cart {
     paymentType: json["payment_type"]??"",
     points: json["points"]??0,
     comment: json["comment"],
-    vendor: Vendor.fromJson(json["vendor"]),
+    vendor: json["vendor"] == null? null: Vendor.fromJson(json["vendor"]),
     address: json["address"]  == null ? null : Address.fromJson(json["address"]),
   );
 

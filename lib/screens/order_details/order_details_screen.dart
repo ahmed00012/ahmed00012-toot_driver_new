@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:easy_localization/src/public_ext.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/cupertino.dart';
@@ -120,13 +122,16 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                       SizedBox(
                                         width: 10,
                                       ),
-                                      Text(
-                                        detailsProvider
-                                            .order.orders!.cart!.address2!,
-                                        style: TextStyle(
-                                            fontSize: 18,
-                                            color: kColorPrimary,
-                                            fontWeight: FontWeight.bold),
+                                      Expanded(
+                                        child: Text(
+                                          detailsProvider
+                                              .order.orders!.cart!.address2!,
+                                          maxLines: 2,
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              color: kColorPrimary,
+                                              fontWeight: FontWeight.bold),
+                                        ),
                                       ),
                                     ],
                                   )),
@@ -149,13 +154,19 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                       SizedBox(
                                         width: 10,
                                       ),
-                                      Text(
-                                        detailsProvider
-                                            .order.orders!.cart!.district!,
-                                        style: TextStyle(
-                                            fontSize: 18,
-                                            color: kColorPrimary,
-                                            fontWeight: FontWeight.bold),
+                                      Expanded(
+                                        // height: 80,
+                                        // width: 100,
+                                        child: Text(
+                                          detailsProvider
+                                              .order.orders!.cart!.district!,
+                                          maxLines: 4,
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              color: kColorPrimary,
+                                              fontWeight: FontWeight.bold),
+                                        ),
                                       ),
                                     ],
                                   )),
@@ -219,6 +230,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                           detailsProvider.order.orders!.cart!
                                               .items![i].count
                                               .toString(),
+
                                           //  textAlign: TextAlign.center,
                                           style: TextStyle(
                                               color: kColorPrimary,
@@ -228,12 +240,15 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                         SizedBox(
                                           width: 5,
                                         ),
-                                        FittedBox(
-                                          fit: BoxFit.fitHeight,
+                                        Container(
+                                          width: 150,
+                                        //  fit: BoxFit.fitHeight,
                                           child: Text(
                                             detailsProvider.order.orders!.cart!
                                                 .items![i].productName
                                                 .toString(),
+                                           // textAlign: TextAlign.right,
+                                            overflow: TextOverflow.ellipsis,
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
                                                 color: Colors.black,
@@ -262,7 +277,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                                 .items![i].cartitemoption !=
                                             null
                                         ? Container(
-                                            //  height: 100,
+                                        //      height: 100,
                                             padding:
                                                 EdgeInsets.only(bottom: 10),
                                             child: Column(
@@ -281,48 +296,50 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                                     padding:
                                                         const EdgeInsets.all(
                                                             8.0),
-                                                    child: Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceEvenly,
-                                                      children: [
-                                                        Text(
-                                                          LocaleKeys
-                                                              .options_translate
-                                                              .tr(),
-                                                          softWrap: true,
-                                                          overflow:
-                                                              TextOverflow.fade,
-                                                        ),
-                                                        Text(
-                                                          context.locale
-                                                                      .toString() ==
-                                                                  'ar'
-                                                              ? detailsProvider
-                                                                  .order
-                                                                  .orders!
-                                                                  .cart!
-                                                                  .items![i]
-                                                                  .cartitemoption![
-                                                                      j]
-                                                                  .optionvalue!
-                                                                  .nameAr
-                                                                  .toString()
-                                                              : detailsProvider
-                                                                  .order
-                                                                  .orders!
-                                                                  .cart!
-                                                                  .items![i]
-                                                                  .cartitemoption![
-                                                                      j]
-                                                                  .optionvalue!
-                                                                  .nameEn
-                                                                  .toString(),
-                                                          softWrap: true,
-                                                          overflow:
-                                                              TextOverflow.fade,
-                                                        ),
-                                                      ],
+                                                    child: Expanded(
+                                                      child: Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceEvenly,
+                                                        children: [
+                                                          Text(
+                                                            LocaleKeys
+                                                                .options_translate
+                                                                .tr(),
+                                                            softWrap: true,
+                                                            overflow:
+                                                                TextOverflow.fade,
+                                                          ),
+                                                          Text(
+                                                            context.locale
+                                                                        .toString() ==
+                                                                    'ar'
+                                                                ? detailsProvider
+                                                                    .order
+                                                                    .orders!
+                                                                    .cart!
+                                                                    .items![i]
+                                                                    .cartitemoption![
+                                                                        j]
+                                                                    .optionvalue!
+                                                                    .nameAr
+                                                                    .toString()
+                                                                : detailsProvider
+                                                                    .order
+                                                                    .orders!
+                                                                    .cart!
+                                                                    .items![i]
+                                                                    .cartitemoption![
+                                                                        j]
+                                                                    .optionvalue!
+                                                                    .nameEn
+                                                                    .toString(),
+                                                            softWrap: true,
+                                                            overflow:
+                                                                TextOverflow.fade,
+                                                          ),
+                                                        ],
+                                                      ),
                                                     ),
                                                   ),
                                               ],

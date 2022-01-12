@@ -59,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   //             notification.title ?? "",
   //             notification.body ?? "",
   //             // TODO add a proper drawable resource to android, for now using
-  //             //      one that already exists in example app.
+  //             //      one that already exists in icontds app.
   //             icon: '@mipmap/ic_launcher',
   //           ),
   //         ),
@@ -155,7 +155,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   //               notification.title!,
   //               notification.body!,
   //               // TODO add a proper drawable resource to android, for now using
-  //               //      one that already exists in example app.
+  //               //      one that already exists in icontds app.
   //               icon: '@mipmap/ic_launcher',
   //             ),
   //           ));
@@ -290,6 +290,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               ),
             ),
             duration: Duration(seconds: 3),
+            elevation: 2.0,
             background: Colors.green,
           );
         } else {
@@ -331,6 +332,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               ),
             ),
             duration: Duration(seconds: 3),
+            elevation: 2.0,
             background: Colors.green,
           );
         }

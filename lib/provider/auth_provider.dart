@@ -12,7 +12,7 @@ class AuthProvider with ChangeNotifier {
   StatusModel status = new StatusModel();
   String lang = "en";
 
-  Future<void> login(
+  Future login(
     String phone,
     String password,
     String deviceId,
@@ -20,10 +20,13 @@ class AuthProvider with ChangeNotifier {
     print(deviceId);
     // SharedPreferences prefs = await SharedPreferences.getInstance();
     // lang = prefs.getString("lang") ?? "en";
-    userModel = await AuthService.instance.login(phone, password, deviceId);
+    // userModel =
 
+    var response = await AuthService.instance.login(phone, password, deviceId);
+    if (response['success'] == "1") userModel = UserModel.fromJson(response);
     // getProfile();
     notifyListeners();
+    return response;
   }
 
   Future<void> changePass(
@@ -44,7 +47,7 @@ class AuthProvider with ChangeNotifier {
   Future<void> logout() async {
     await AuthService.instance.logOut();
     // await userModel?.resetUser();
-    userModel = null;
+    // userModel = null;
 //    _timer?.cancel();
 
     notifyListeners();

@@ -1,6 +1,7 @@
-import 'dart:developer';
+import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:http/http.dart' as http;
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:tood_driver_new/models/change_status.dart';
 import 'package:tood_driver_new/models/user_model.dart';
@@ -31,39 +32,54 @@ class AuthService {
     "Content-Language": "ar",
   };
 
-  Future<UserModel?> login(
-      String phone, String password, String deviceId) async {
-    print(deviceId + 'kjbfvfkhb v');
-    // Json Data
-    // var _data = {
-    //   "phone": "$phone",
-    //   "password": "$password",
-    //   "device_id": "$deviceId"
-    // };
-    print('login start');
-    // Http Request
+  Future login(String phone, String password, String deviceId) async {
+    var response = await http
+        .post(Uri.parse("https://toot.work/api/auth/driverlogin"), body: {
+      "phone": "$phone",
+      "password": "$password",
+      "device_id": "$deviceId"
+    }, headers: {
+      "Content-Language": 'ar',
+    });
+    return json.decode(response.body);
 
-    var _response = await dio.post(ServerConstants.Login,
-        data: {
-          "phone": "$phone",
-          "password": "$password",
-          "device_id": "$deviceId"
-        },
-        options: Options(
-          headers: {
-            "Content-Language": 'ar',
-          },
-        ));
+    // print(deviceId + 'kkkkkkkkkk');
+    // try {
+    //   var response = await Dio().post(
+    //     "https://toot.work/api/auth/driverlogin",
+    //     data: {
+    //       "phone": "$phone",
+    //       "password": "$password",
+    //       "device_id": "$deviceId"
+    //     },
+    //     options: Options(
+    //       headers: {
+    //         "Content-Language": 'ar',
+    //       },
+    //     ),
+    //   );
+    //   print('zzzzzz');
+    //   print(response.statusCode.toString() + 'hghhhhhh');
+    //   return response.data;
+    // } catch (e) {
+    //   final errorMessage = DioExceptions.fromDioError(e as DioError).toString();
+    //   print(errorMessage);
+    //   return errorMessage;
+    // }
+    //     .catchError((error) {
+    //   final errorMessage = DioExceptions.fromDioError(e).toString();
+    //   // return dioError!.message;
+    // });
+    // if (DioErrorType.response) print(DioErrorType.response);
 
-    print("mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm");
-    log("${_response.data}");
+    // log("${response.data}");
 
-    if (ServerConstants.isValidResponse(_response.statusCode!)) {
-      user = UserModel.fromJson(_response.data);
-      return user;
-    } else {
-      throw ApiException.fromApi(_response.statusCode!, _response.data);
-    }
+    // if (response.statusCode == 200) {
+    //   user = UserModel.fromJson(response.data);
+    // }
+    // else {
+    //   throw ApiException.fromApi(response.statusCode!, response.data);
+    // }
   }
 
   Future<void> logOut() async {
@@ -205,3 +221,38 @@ Future<String> _getUserToken() async {
   if (userToken == null) throw "User Not Logged In";
   return userToken;
 }
+
+// class DioExceptions implements Exception {
+//   String? message;
+//   DioExceptions.fromDioError(DioError dioError) {
+//     switch (dioError.type) {
+//       case DioErrorType.cancel:
+//         message = "Request to API server was cancelled";
+//         break;
+//       case DioErrorType.response:
+//         message = _handleError(401, dioError.response);
+//         break;
+//       default:
+//         message = "Something went wrong";
+//         break;
+//     }
+//   }
+//
+//   String _handleError(int statusCode, dynamic error) {
+//     switch (statusCode) {
+//       case 400:
+//         return 'Bad request';
+//       case 404:
+//         return error["message"];
+//       case 500:
+//         return 'Internal server error';
+//       case 401:
+//         return 'بيانات الاعتماد هذه غير متطابقة مع البيانات المسجلة لدينا';
+//       default:
+//         return 'Oops something went wrong';
+//     }
+//   }
+//
+//   @override
+//   String toString() => message!;
+// }

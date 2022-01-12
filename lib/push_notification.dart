@@ -43,7 +43,7 @@
 //                   notification.title??"",
 //                   notification.body??"",
 //                   // TODO add a proper drawable resource to android, for now using
-//                   //      one that already exists in example app.
+//                   //      one that already exists in icontds app.
 //                   icon: 'app_icon',
 //                 ),
 //               ));
